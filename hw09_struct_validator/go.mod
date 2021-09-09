@@ -1,3 +1,3 @@
-module github.com/fixme_my_friend/hw09_struct_validator
+module github.com/turneps403/otus-go-prof/hw09_struct_validator
 
 go 1.16
