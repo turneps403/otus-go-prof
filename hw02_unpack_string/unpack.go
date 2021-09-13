@@ -20,6 +20,7 @@ func Unpack(s string) (string, error) {
 	var sb strings.Builder
 	r := myreader.NewMyReader(s)
 	for r.HasNext() {
+		// rune, repetitions, error
 		ru, rep, err := r.Next()
 		if err != nil {
 			if err, ok := err.(*myreader.ReaderError); ok {
