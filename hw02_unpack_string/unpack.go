@@ -1,6 +1,7 @@
 package hw02unpackstring
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 
@@ -23,11 +24,11 @@ func Unpack(s string) (string, error) {
 		// rune, repetitions, error
 		ru, rep, err := r.Next()
 		if err != nil {
-			if err, ok := err.(*myreader.ReaderError); ok {
+			var t *myreader.ReaderError
+			if errors.As(err, &t) {
 				return "", &UnpackError{reason: "reader cant get next character", err: err}
-			} else {
-				return "", err
 			}
+			return "", err
 		}
 		fmt.Fprint(&sb, strings.Repeat(string(ru), rep))
 	}

@@ -140,7 +140,6 @@ func TestReaderValid(t *testing.T) {
 			require.Falsef(t, r.HasNext(), "outcome from reader longer than expected")
 		})
 	}
-
 }
 
 func TestReaderInValid(t *testing.T) {
@@ -189,5 +188,4 @@ func TestReaderInValid(t *testing.T) {
 			}
 		})
 	}
-
 }

@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
-
 	hw02unpackstring "github.com/turneps403/otus-go-prof/hw02_unpack_string"
 )
 
