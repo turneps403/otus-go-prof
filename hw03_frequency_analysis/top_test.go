@@ -80,3 +80,41 @@ func TestTop10(t *testing.T) {
 		}
 	})
 }
+
+func TestTopK(t *testing.T) {
+	t.Run("at most k words (one)", func(t *testing.T) {
+		require.Len(t, TopK("foo bar baz foo bar baz", 2), 2)
+	})
+
+	t.Run("at most k words (two)", func(t *testing.T) {
+		require.Len(t, TopK("foo bar baz foo bar baz", 5), 3)
+	})
+}
+
+func TestHiragana(t *testing.T) {
+	t.Run("Hiragana count", func(t *testing.T) {
+		require.Len(t, TopK("晩ご 飯を 食べま す 晩ご 飯を 食べま す", 2), 2)
+	})
+
+	t.Run("Hiragana positive test", func(t *testing.T) {
+		expected := []string{
+			"晩ご", // 3
+			"飯を", // 2
+		}
+		require.Equal(t, expected, TopK("晩ご 飯を 飯を 晩ご 食べま 晩ご す", 2))
+	})
+
+	t.Run("Hiragana positive test with noise", func(t *testing.T) {
+		expected := []string{
+			"す",   // 3
+			"晩cご", // 2
+		}
+		require.Equal(t, expected, TopK("す Ю晩ご 晩cご 飯を! す Я飯をб 晩cご, ~食べま 晩ご== す 晩cご", 2))
+	})
+}
+
+func TestDummy(t *testing.T) {
+	t.Run("Hiragana count", func(t *testing.T) {
+		require.Len(t, TopK("!~ == ,§± ;'", 2), 0)
+	})
+}
