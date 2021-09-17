@@ -12,7 +12,7 @@ var (
 	reWordSanitizer = regexp.MustCompile(`(^[^\p{L}]+|[^\p{L}]+$)`)
 )
 
-// total O(N + MlogM + k) ~ O(NlogN)
+// total O(N + MlogM + k) ~ O(NlogN).
 func TopK(s string, k int) []string {
 	// split by words, O(N)
 	rawWords := reStringSplitter.Split(s, -1)
