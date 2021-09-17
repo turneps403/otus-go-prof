@@ -114,7 +114,7 @@ func TestHiragana(t *testing.T) {
 }
 
 func TestDummy(t *testing.T) {
-	t.Run("Hiragana count", func(t *testing.T) {
+	t.Run("Dummy test with noise", func(t *testing.T) {
 		require.Len(t, TopK("!~ == ,§± ;'", 2), 0)
 	})
 }
