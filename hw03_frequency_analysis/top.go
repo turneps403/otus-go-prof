@@ -3,18 +3,25 @@ package hw03frequencyanalysis
 import (
 	"regexp"
 	"sort"
+	"strings"
+)
+
+var (
+	reStringSplitter = regexp.MustCompile(`\s+`)
+	// https://stackoverflow.com/questions/1716609/how-to-match-cyrillic-characters-with-a-regular-expression
+	reWordSanitizer = regexp.MustCompile(`(^[^\p{L}]+|[^\p{L}]+$)`)
 )
 
 // total O(N + MlogM + k) ~ O(NlogN)
 func TopK(s string, k int) []string {
 	// split by words, O(N)
-	re := regexp.MustCompile(`\s+`)
-	rawWords := re.Split(s, -1)
+	rawWords := reStringSplitter.Split(s, -1)
 
 	words := make([]string, 0, len(rawWords))
 	for _, w := range rawWords {
+		w = string(reWordSanitizer.ReplaceAll([]byte(w), []byte{}))
 		if len(w) > 0 {
-			words = append(words, w)
+			words = append(words, strings.ToLower(w))
 		}
 	}
 
