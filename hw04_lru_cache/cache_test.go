@@ -50,8 +50,26 @@ func TestCache(t *testing.T) {
 		require.Nil(t, val)
 	})
 
-	t.Run("purge logic", func(t *testing.T) {
-		// Write me
+	t.Run("rare used elements", func(t *testing.T) {
+		c := hw04lrucache.NewCache(3)
+
+		wasInCache := c.Set("one", 1)
+		require.False(t, wasInCache)
+
+		wasInCache = c.Set("two", 2)
+		require.False(t, wasInCache)
+
+		wasInCache = c.Set("three", 3)
+		require.False(t, wasInCache)
+
+		c.Get("two")
+		c.Get("two")
+
+		wasInCache = c.Set("four", 4)
+		require.False(t, wasInCache)
+
+		val, _ := c.Get("one")
+		require.Nil(t, val)
 	})
 }
 
