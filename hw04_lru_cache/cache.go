@@ -2,6 +2,8 @@ package hw04lrucache
 
 import "sync"
 
+// https://stackoverflow.com/questions/48861029/what-is-the-benefit-of-using-rwmutex-instead-of-mutex/48861083
+// lock/unlock takes 100ns for every ops.
 var (
 	mapMutex = sync.RWMutex{}
 )
@@ -79,5 +81,7 @@ func (lru *lruCache) Get(key Key) (interface{}, bool) {
 
 func (lru *lruCache) Clear() {
 	lru.queue = NewList()
+	mapMutex.Lock()
 	lru.items = make(map[Key]*ListItem, lru.capacity)
+	mapMutex.Unlock()
 }
