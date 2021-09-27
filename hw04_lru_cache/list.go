@@ -1,5 +1,10 @@
 package hw04lrucache
 
+import (
+	"fmt"
+	"strings"
+)
+
 type List interface {
 	Len() int
 	Front() *ListItem
@@ -7,20 +12,90 @@ type List interface {
 	PushFront(v interface{}) *ListItem
 	PushBack(v interface{}) *ListItem
 	Remove(i *ListItem)
-	MoveToFront(i *ListItem)
+	fmt.Stringer // for some debug purposes
 }
 
 type ListItem struct {
-	Value interface{}
-	Next  *ListItem
-	Prev  *ListItem
+	Val  interface{}
+	Next *ListItem
+	Prev *ListItem
 }
 
 type list struct {
-	List // Remove me after realization.
-	// Place your code here.
+	head   *ListItem
+	tail   *ListItem
+	length int
 }
 
+// Explanation: https://sentry.io/answers/interface-pointer-receiver/
 func NewList() List {
-	return new(list)
+	return List(new(list))
+}
+
+func (l *list) Len() int {
+	return l.length
+}
+
+func (l *list) Front() *ListItem {
+	return l.head
+}
+
+func (l *list) Back() *ListItem {
+	return l.tail
+}
+
+func (l *list) PushFront(v interface{}) *ListItem {
+	el := &ListItem{Val: v, Next: l.head}
+	if l.head != nil {
+		l.head.Prev = el
+	}
+	l.head = el
+	if l.Back() == nil {
+		l.tail = l.head
+	}
+	l.length++
+	return l.Front()
+}
+
+func (l *list) PushBack(v interface{}) *ListItem {
+	if l.Back() == nil {
+		l.tail = &ListItem{Val: v}
+		l.head = l.tail
+	} else {
+		l.tail.Next = &ListItem{Val: v, Prev: l.tail}
+		l.tail = l.tail.Next
+	}
+	l.length++
+	return l.Back()
+}
+
+func (l *list) Remove(it *ListItem) {
+	if it.Prev != nil {
+		it.Prev.Next = it.Next
+	}
+	if it.Next != nil {
+		it.Next.Prev = it.Prev
+	}
+	l.length--
+	if l.head == it {
+		l.head = it.Next
+	}
+	if l.tail == it {
+		l.tail = it.Prev
+	}
+}
+
+func (l *list) String() string { // reuse knowledge from the `hw01_hello_otus`
+	var sb strings.Builder
+	fmt.Fprint(&sb, "[")
+	t := l.head
+	for t != nil {
+		fmt.Fprint(&sb, t.Val)
+		if t.Next != nil {
+			fmt.Fprint(&sb, " -> ")
+		}
+		t = t.Next
+	}
+	fmt.Fprint(&sb, "]")
+	return sb.String()
 }
