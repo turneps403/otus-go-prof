@@ -39,7 +39,10 @@ func NewList() List {
 }
 
 func (l *list) Len() int {
-	return l.length
+	listMutex.RLock()
+	ret := l.length
+	listMutex.RUnlock()
+	return ret
 }
 
 func (l *list) Front() *ListItem {
