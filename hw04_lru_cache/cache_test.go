@@ -7,7 +7,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
-	hw04lrucache "github.com/turneps403/otus-go-prof/hw04lrucache"
+	hw04lrucache "github.com/turneps403/otus-go-prof/hw04_lru_cache"
 )
 
 func TestCache(t *testing.T) {
