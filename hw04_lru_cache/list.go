@@ -3,6 +3,12 @@ package hw04lrucache
 import (
 	"fmt"
 	"strings"
+	"sync"
+)
+
+// FOR SUCC PASS: go test -v -count=1 -race -timeout=1m .
+var (
+	listMutex = sync.RWMutex{}
 )
 
 type List interface {
@@ -45,6 +51,7 @@ func (l *list) Back() *ListItem {
 }
 
 func (l *list) PushFront(v interface{}) *ListItem {
+	listMutex.Lock()
 	el := &ListItem{Val: v, Next: l.head}
 	if l.head != nil {
 		l.head.Prev = el
@@ -54,10 +61,12 @@ func (l *list) PushFront(v interface{}) *ListItem {
 		l.tail = l.head
 	}
 	l.length++
+	listMutex.Unlock()
 	return l.Front()
 }
 
 func (l *list) PushBack(v interface{}) *ListItem {
+	listMutex.Lock()
 	if l.Back() == nil {
 		l.tail = &ListItem{Val: v}
 		l.head = l.tail
@@ -66,10 +75,12 @@ func (l *list) PushBack(v interface{}) *ListItem {
 		l.tail = l.tail.Next
 	}
 	l.length++
+	listMutex.Unlock()
 	return l.Back()
 }
 
 func (l *list) Remove(it *ListItem) {
+	listMutex.Lock()
 	if it.Prev != nil {
 		it.Prev.Next = it.Next
 	}
@@ -83,6 +94,7 @@ func (l *list) Remove(it *ListItem) {
 	if l.tail == it {
 		l.tail = it.Prev
 	}
+	listMutex.Unlock()
 }
 
 func (l *list) String() string { // reuse knowledge from the `hw01_hello_otus`

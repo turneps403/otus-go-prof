@@ -51,9 +51,9 @@ func (lru *lruCache) Set(key Key, value interface{}) bool {
 		wasInCache = true
 	}
 	// add to head
+	mapMutex.Lock()
 	el := cacheItem{key: key, value: value}
 	li = lru.queue.PushFront(el)
-	mapMutex.Lock()
 	lru.items[key] = li
 	mapMutex.Unlock()
 	if lru.queue.Len() > lru.capacity {
