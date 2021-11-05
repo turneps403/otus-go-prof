@@ -68,3 +68,64 @@ func TestRun(t *testing.T) {
 		require.LessOrEqual(t, int64(elapsedTime), int64(sumTime/2), "tasks were run sequentially?")
 	})
 }
+
+func TestEventuallyResCheck(t *testing.T) {
+	defer goleak.VerifyNone(t)
+
+	t.Run("tasks without errors and without timeout", func(t *testing.T) {
+		tasksCount := 153
+		tasks := make([]Task, 0, tasksCount)
+
+		var runTasksCount int32
+
+		for i := 0; i < tasksCount; i++ {
+			tasks = append(tasks, func() error {
+				atomic.AddInt32(&runTasksCount, 1)
+				return nil
+			})
+		}
+
+		workersCount := 13
+		maxErrorsCount := 0
+
+		require.Eventually(t, func() bool {
+			err := Run(tasks, workersCount, maxErrorsCount)
+			require.NoError(t, err)
+			return runTasksCount == int32(len(tasks))
+		}, time.Second/100, time.Second/1000)
+	})
+
+	t.Run("tasks with errors and without timeout", func(t *testing.T) {
+		tasksCount := 117
+		errorCount := 11
+		tasks := make([]Task, 0, tasksCount)
+
+		var runTasksCount int32
+		var runErrCount int32
+
+		for i := 0; i < tasksCount; i++ {
+			tasks = append(tasks, func() error {
+				atomic.AddInt32(&runTasksCount, 1)
+				return nil
+			})
+		}
+
+		for i, errCnt := 0, 0; errCnt < errorCount && i < tasksCount; i, errCnt = i+2, errCnt+1 {
+			err := fmt.Errorf("error from task %d", i)
+			tasks[i] = func() error {
+				atomic.AddInt32(&runErrCount, 1)
+				return err
+			}
+		}
+
+		workersCount := 1
+		maxErrorsCount := 5
+
+		require.Eventually(t, func() bool {
+			err := Run(tasks, workersCount, maxErrorsCount)
+			require.Error(t, err)
+			// fmt.Printf("maxErrorsCount = %v, runErrCount = %v, errorCount = %v\n", maxErrorsCount, runErrCount, errorCount)
+			return int32(maxErrorsCount) < runErrCount && runErrCount <= int32(errorCount)
+		}, time.Second/100, time.Second/1000)
+	})
+}
