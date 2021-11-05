@@ -37,7 +37,7 @@ func Run(tasks []Task, n, m int) error {
 		case reqCh <- tasks[i]:
 			send++
 			if i == len(tasks)-1 {
-				// no body will listen this new dummy-channel, and writen is impossible
+				// no body will listen this new dummy-channel, and written is impossible
 				reqCh = make(chan Task)
 				defer close(reqCh)
 			} else {
