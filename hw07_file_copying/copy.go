@@ -70,6 +70,12 @@ func Copy(fromPath, toPath string, offset, limit int64) error {
 	}
 
 	copyLimit := int64(PagePerCopy * os.Getpagesize())
+	bar := NewBar(int(limit))
+	defer bar.Finish()
+	ctrlc := NewCtrlC(func() {
+		defer os.Remove(toPath)
+	})
+	defer ctrlc.Done()
 	for limit > 0 {
 		if copyLimit > limit {
 			copyLimit = limit
@@ -81,6 +87,7 @@ func Copy(fromPath, toPath string, offset, limit int64) error {
 			return errors.Wrap(ErrBadCopy, err.Error())
 		} else {
 			limit -= wCnt
+			bar.Add(int(wCnt))
 		}
 	}
 
