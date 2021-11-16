@@ -8,6 +8,10 @@ import (
 	"github.com/pkg/errors"
 )
 
+const (
+	PagePerCopy = 1
+)
+
 var (
 	ErrBadArguments = errors.New("Bad arguments")
 	ErrBadFile      = errors.New("Bad file")
@@ -30,7 +34,7 @@ func Copy(fromPath, toPath string, offset, limit int64) error {
 	defer to.Close()
 
 	// checking permissions of source file
-	if info, err := os.Stat(from); err == nil {
+	if info, err := os.Stat(fromPath); err == nil {
 		if !info.Mode().IsRegular() {
 			return errors.Wrap(ErrBadFile, fmt.Sprintf("%s is not a regular file", fromPath))
 		}
@@ -47,10 +51,10 @@ func Copy(fromPath, toPath string, offset, limit int64) error {
 			limit = info.Size() - offset
 		}
 	} else if errors.Is(err, os.ErrNotExist) {
-		return errors.Wrap(ErrBadFile, fmt.Sprintf("path '%s' isn't a file", fromPath))
+		return errors.Wrap(ErrBadFile, fmt.Sprintf("path '%s' isn't a file: %v", fromPath, err))
 	} else {
-		panic(err)
-		// return errors.Wrap(ErrBadFile, err.Error())
+		// panic(err)
+		return errors.Wrap(ErrBadFile, err.Error())
 	}
 
 	// open a source file
@@ -65,12 +69,12 @@ func Copy(fromPath, toPath string, offset, limit int64) error {
 		return errors.Wrap(ErrBadFile, fmt.Sprintf("seek problem: %s", err.Error()))
 	}
 
-	pageSize := int64(os.Getpagesize())
+	copyLimit := int64(PagePerCopy * os.Getpagesize())
 	for limit > 0 {
-		if pageSize > limit {
-			pageSize = limit
+		if copyLimit > limit {
+			copyLimit = limit
 		}
-		if wCnt, err := io.CopyN(to, from, pageSize); err != nil {
+		if wCnt, err := io.CopyN(to, from, copyLimit); err != nil {
 			if errors.Is(err, io.EOF) {
 				return nil
 			}
