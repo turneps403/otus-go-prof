@@ -1,9 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"io/fs"
 	"io/ioutil"
 	"log"
+	"path/filepath"
 	"strings"
 	"sync"
 )
@@ -27,13 +29,40 @@ func (c *syncEnvironment) add(name, value string, remove bool) {
 	c.mu.Unlock()
 }
 
+func chompLine(s string) string {
+	// to simplify things, we read whole content of file
+	// and chomp one line from the top.
+	// not a production version, just a concept
+	sb := strings.Builder{}
+	for _, c := range s {
+		if c == '\n' {
+			break
+		}
+		sb.WriteRune(c)
+	}
+	return sb.String()
+}
+
 func isValidEnvName(name string) bool {
+	if name == "NUL" {
+		return false
+	}
+	if name[0] >= '0' && name[0] <= '9' {
+		return false
+	}
 	for _, c := range name {
-		if ('A' > c || c > 'Z') && c != '_' {
+		if (c < 'A' || c > 'Z') && (c < '0' || c > '9') && c != '_' {
 			return false
 		}
 	}
 	return true
+}
+
+func makeValidEnvValue(s string) string {
+	// ignoring foo:bar:baz as multivalue
+	s = strings.TrimSpace(s)
+	s = chompLine(s)
+	return fmt.Sprintf("%q", s)
 }
 
 // ReadDir reads a specified directory and returns map of env variables.
@@ -50,19 +79,19 @@ func ReadDir(dir string) (Environment, error) {
 			continue
 		}
 		wg.Add(1)
-		go func(finfo fs.FileInfo) {
+		go func(finfo fs.FileInfo, dir string, myEnv *syncEnvironment) {
 			defer wg.Done()
-			if file.Size() == 0 {
-				myEnv.add(file.Name(), "", true)
+			if finfo.Size() == 0 {
+				myEnv.add(finfo.Name(), "", true)
 				return
 			}
-			content, err := ioutil.ReadFile(file.Name())
+			content, err := ioutil.ReadFile(filepath.Join(dir, finfo.Name()))
 			if err != nil {
 				log.Fatal(err)
 				return
 			}
-			myEnv.add(file.Name(), strings.TrimSpace(string(content)), false)
-		}(file)
+			myEnv.add(finfo.Name(), makeValidEnvValue(string(content)), false)
+		}(file, dir, myEnv)
 	}
 	wg.Wait()
 
