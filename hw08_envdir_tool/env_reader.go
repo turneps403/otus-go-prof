@@ -49,6 +49,7 @@ func chompLine(s string) string {
 		sb.WriteRune(c)
 	}
 	if hasNonGraphic || isOnlySpace {
+		// see also https://groups.google.com/g/golang-nuts/c/3aKF5NonPUc?pli=1
 		return fmt.Sprintf("%q", sb.String())
 	}
 	return sb.String()
