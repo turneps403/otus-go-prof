@@ -9,10 +9,11 @@ import (
 
 func TestRunPwdEnv(t *testing.T) {
 	t.Log("run env")
-	stdout := os.Stdout
-	defer func() { os.Stdout = stdout }()
-	os.Stdout = os.NewFile(0, os.DevNull)
-	exCode := RunCmd([]string{"pwd"}, make(Environment))
+	//stdout := os.Stdout
+	//defer func() { os.Stdout = stdout }()
+	//os.Stdout = os.NewFile(0, os.DevNull)
+	//exCode := RunCmd([]string{"pwd"}, make(Environment))
+	exCode := RunCmd([]string{"git", "--version"}, make(Environment))
 	require.Equal(t, 0, exCode)
 }
 
