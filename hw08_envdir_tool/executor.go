@@ -9,7 +9,7 @@ import (
 )
 
 // RunCmd runs a command + arguments (cmd) with environment variables from env.
-// could raise panic
+// could raise panic.
 func RunCmd(cmd []string, env Environment) (returnCode int) {
 	proc := exec.Command(cmd[0], cmd[1:]...) //nolint:gosec
 

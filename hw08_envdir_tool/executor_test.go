@@ -7,12 +7,12 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestRunCmdEnv(t *testing.T) {
+func TestRunPwdEnv(t *testing.T) {
 	t.Log("run env")
 	stdout := os.Stdout
 	defer func() { os.Stdout = stdout }()
 	os.Stdout = os.NewFile(0, os.DevNull)
-	exCode := RunCmd([]string{"env"}, make(Environment))
+	exCode := RunCmd([]string{"pwd"}, make(Environment))
 	require.Equal(t, 0, exCode)
 }
 
@@ -21,7 +21,7 @@ func TestRunCmdLsLa(t *testing.T) {
 	stdout := os.Stdout
 	defer func() { os.Stdout = stdout }()
 	os.Stdout = os.NewFile(0, os.DevNull)
-	exCode := RunCmd([]string{"ls", "-la"}, make(Environment))
+	exCode := RunCmd([]string{"ls", "-l"}, make(Environment))
 	require.Equal(t, 0, exCode)
 }
 
