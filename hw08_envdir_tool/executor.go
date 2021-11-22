@@ -12,9 +12,8 @@ import (
 func RunCmd(cmd []string, env Environment) (returnCode int) {
 	proc := exec.Command(cmd[0], cmd[1:]...) //nolint:gosec
 
-	// if you need current env, then uncomment this section:
-	// proc.Env = make([]string, len(os.Environ()))
-	// copy(proc.Env, os.Environ())
+	proc.Env = make([]string, len(os.Environ()))
+	copy(proc.Env, os.Environ())
 	for k, v := range env {
 		if v.NeedRemove {
 			proc.Env = append(proc.Env, fmt.Sprintf("%v=", k))

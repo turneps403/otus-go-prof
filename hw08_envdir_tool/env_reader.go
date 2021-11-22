@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 	"sync"
+	"unicode"
 )
 
 type Environment map[string]EnvValue
@@ -33,12 +34,22 @@ func chompLine(s string) string {
 	// to simplify things, we read whole content of file
 	// and chomp one line from the top.
 	// not a production version, just a concept
+	hasNonGraphic, isOnlySpace := false, true
 	sb := strings.Builder{}
 	for _, c := range s {
 		if c == '\n' {
 			break
 		}
+		if !hasNonGraphic && !unicode.IsGraphic(c) {
+			hasNonGraphic = true
+		}
+		if isOnlySpace && !unicode.IsSpace(c) {
+			isOnlySpace = false
+		}
 		sb.WriteRune(c)
+	}
+	if hasNonGraphic || isOnlySpace {
+		return fmt.Sprintf("%q", sb.String())
 	}
 	return sb.String()
 }
@@ -58,13 +69,6 @@ func isValidEnvName(name string) bool {
 	return true
 }
 
-func makeValidEnvValue(s string) string {
-	// ignoring foo:bar:baz as multivalue
-	s = strings.TrimSpace(s)
-	s = chompLine(s)
-	return fmt.Sprintf("%q", s)
-}
-
 // ReadDir reads a specified directory and returns map of env variables.
 // Variables represented as files where filename is name of variable, file first line is a value.
 func ReadDir(dir string) (Environment, error) {
@@ -79,7 +83,7 @@ func ReadDir(dir string) (Environment, error) {
 			continue
 		}
 		wg.Add(1)
-		go func(finfo fs.FileInfo, dir string, myEnv *syncEnvironment) {
+		go func(finfo fs.FileInfo) {
 			defer wg.Done()
 			if finfo.Size() == 0 {
 				myEnv.add(finfo.Name(), "", true)
@@ -90,8 +94,8 @@ func ReadDir(dir string) (Environment, error) {
 				log.Fatal(err)
 				return
 			}
-			myEnv.add(finfo.Name(), makeValidEnvValue(string(content)), false)
-		}(file, dir, myEnv)
+			myEnv.add(finfo.Name(), chompLine(string(content)), false)
+		}(file)
 	}
 	wg.Wait()
 
