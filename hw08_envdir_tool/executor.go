@@ -9,6 +9,7 @@ import (
 )
 
 // RunCmd runs a command + arguments (cmd) with environment variables from env.
+// could raise panic
 func RunCmd(cmd []string, env Environment) (returnCode int) {
 	proc := exec.Command(cmd[0], cmd[1:]...) //nolint:gosec
 
@@ -27,7 +28,7 @@ func RunCmd(cmd []string, env Environment) (returnCode int) {
 	proc.Stderr = os.Stderr
 
 	if err := proc.Start(); err != nil {
-		log.Fatalf("proc.Start: %v", err)
+		panic(fmt.Sprintf("proc.Start: %v", err))
 	}
 
 	if err := proc.Wait(); err != nil {
