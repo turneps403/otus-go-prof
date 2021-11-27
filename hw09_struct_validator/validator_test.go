@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"testing"
+
+	"github.com/stretchr/testify/require"
 )
 
 type UserRole string
@@ -39,22 +41,31 @@ type (
 func TestValidate(t *testing.T) {
 	tests := []struct {
 		in          interface{}
-		expectedErr error
+		expectedErr bool
 	}{
-		{
-			// Place your code here.
-		},
+		{App{Version: "12345"}, false},
+		{App{Version: "1234"}, true},
+		{App{Version: "123456"}, true},
 		// ...
 		// Place your code here.
 	}
 
 	for i, tt := range tests {
+		tt := tt
 		t.Run(fmt.Sprintf("case %d", i), func(t *testing.T) {
-			tt := tt
 			t.Parallel()
-
-			// Place your code here.
-			_ = tt
+			err := Validate(tt.in)
+			if tt.expectedErr {
+				require.Error(t, err)
+			} else {
+				require.NoError(t, err)
+			}
 		})
 	}
+}
+
+func TestValidateMy(t *testing.T) {
+	// a := App{Version: "12345"}
+	// err := Validate(a)
+	// fmt.Println(err)
 }
