@@ -16,7 +16,7 @@ func init() {
 				vals[v] = nil
 			}
 
-			switch rv.Kind() {
+			switch rv.Kind() { // nolint:exhaustive
 			case reflect.String:
 				if _, ok := vals[rv.String()]; !ok {
 					return fmt.Errorf("val %s outside of possible values %v", rv.String(), vals)

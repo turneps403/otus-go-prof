@@ -15,7 +15,7 @@ func init() {
 				return err
 			}
 
-			switch rv.Kind() {
+			switch rv.Kind() { // nolint:exhaustive
 			case reflect.Slice, reflect.String:
 				if rv.Len() < num {
 					return fmt.Errorf("expected %d but got %d", num, rv.Len())

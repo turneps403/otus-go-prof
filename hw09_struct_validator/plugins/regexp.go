@@ -15,7 +15,7 @@ func init() {
 		func(desc string, rv reflect.Value) error {
 			re := regexp.MustCompile(desc)
 
-			switch rv.Kind() {
+			switch rv.Kind() { // nolint:exhaustive
 			case reflect.String:
 				if !re.MatchString(rv.String()) {
 					return fmt.Errorf("val %s doesnt match for a regexp '%s'", rv.String(), desc)
