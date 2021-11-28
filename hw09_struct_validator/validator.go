@@ -34,12 +34,12 @@ func Validate(iface interface{}) error {
 	for i := 0; i < ift.NumField(); i++ {
 		fv := ifv.Field(i)
 
-		switch fv.Kind() {
+		switch fv.Kind() { // nolint:exhaustive
 		case reflect.Struct:
 			err := Validate(fv.Interface())
 			if err != nil {
 				if errors.Is(err, &ValidationErrors{}) {
-					errs = append(errs, err.(ValidationErrors)...)
+					errs = append(errs, err.(ValidationErrors)...) // nolint:errorlint
 				} else {
 					return err
 				}
