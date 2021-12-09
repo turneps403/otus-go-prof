@@ -1,22 +1,25 @@
-BenchmarkHeavy     	       5	 207964097 ns/op	12348609 B/op	  700981 allocs/op
-BenchmarkHeavy     	       5	 207539230 ns/op	12349108 B/op	  700983 allocs/op
-BenchmarkHeavy     	       5	 209747850 ns/op	12348398 B/op	  700980 allocs/op
-BenchmarkHeavy     	       5	 208481388 ns/op	12349064 B/op	  700983 allocs/op
-BenchmarkHeavy     	       5	 213348664 ns/op	12349188 B/op	  700984 allocs/op
-BenchmarkHeavy-4   	       5	 211730443 ns/op	12349227 B/op	  700984 allocs/op
-BenchmarkHeavy-4   	       5	 214764964 ns/op	12348835 B/op	  700982 allocs/op
-BenchmarkHeavy-4   	       5	 210265485 ns/op	12348876 B/op	  700983 allocs/op
-BenchmarkHeavy-4   	       5	 212790948 ns/op	12348718 B/op	  700982 allocs/op
-BenchmarkHeavy-4   	       5	 216786839 ns/op	12348822 B/op	  700982 allocs/op
-BenchmarkLight     	     189	   5937584 ns/op	    4712 B/op	      37 allocs/op
-BenchmarkLight     	     206	   5955261 ns/op	    4712 B/op	      37 allocs/op
-BenchmarkLight     	     199	   6150623 ns/op	    4712 B/op	      37 allocs/op
-BenchmarkLight     	     196	   5870554 ns/op	    4712 B/op	      37 allocs/op
-BenchmarkLight     	     205	   5943922 ns/op	    4712 B/op	      37 allocs/op
-BenchmarkLight-4   	     202	   5839388 ns/op	    4712 B/op	      37 allocs/op
-BenchmarkLight-4   	     204	   5820736 ns/op	    4712 B/op	      37 allocs/op
-BenchmarkLight-4   	     205	   5917006 ns/op	    4712 B/op	      37 allocs/op
-BenchmarkLight-4   	     201	   6140135 ns/op	    4712 B/op	      37 allocs/op
-BenchmarkLight-4   	     206	   5924808 ns/op	    4712 B/op	      37 allocs/op
+goos: darwin
+goarch: amd64
+cpu: Intel(R) Core(TM) i7-7567U CPU @ 3.50GHz
+BenchmarkHeavy     	       5	 206694006 ns/op	12349188 B/op	  700984 allocs/op
+BenchmarkHeavy     	       5	 205028662 ns/op	12348692 B/op	  700981 allocs/op
+BenchmarkHeavy     	       5	 212442991 ns/op	12348648 B/op	  700981 allocs/op
+BenchmarkHeavy     	       5	 211223134 ns/op	12348686 B/op	  700981 allocs/op
+BenchmarkHeavy     	       5	 203408579 ns/op	12348814 B/op	  700982 allocs/op
+BenchmarkHeavy-4   	       5	 208909863 ns/op	12348923 B/op	  700983 allocs/op
+BenchmarkHeavy-4   	       5	 209614388 ns/op	12349041 B/op	  700983 allocs/op
+BenchmarkHeavy-4   	       5	 210319660 ns/op	12348721 B/op	  700982 allocs/op
+BenchmarkHeavy-4   	       5	 210969281 ns/op	12349800 B/op	  700986 allocs/op
+BenchmarkHeavy-4   	       5	 217414087 ns/op	12349086 B/op	  700983 allocs/op
+BenchmarkLight     	     218	   5657855 ns/op	    4712 B/op	      37 allocs/op
+BenchmarkLight     	     200	   5804375 ns/op	    4712 B/op	      37 allocs/op
+BenchmarkLight     	     202	   5923602 ns/op	    4712 B/op	      37 allocs/op
+BenchmarkLight     	     200	   5931586 ns/op	    4712 B/op	      37 allocs/op
+BenchmarkLight     	     199	   5979804 ns/op	    4712 B/op	      37 allocs/op
+BenchmarkLight-4   	     200	   5927490 ns/op	    4712 B/op	      37 allocs/op
+BenchmarkLight-4   	     198	   6180114 ns/op	    4712 B/op	      37 allocs/op
+BenchmarkLight-4   	     200	   5966418 ns/op	    4712 B/op	      37 allocs/op
+BenchmarkLight-4   	     200	   5815698 ns/op	    4712 B/op	      37 allocs/op
+BenchmarkLight-4   	     200	   5791463 ns/op	    4712 B/op	      37 allocs/op
 PASS
-ok  	command-line-arguments	71.080s
+ok  	command-line-arguments	40.063s
