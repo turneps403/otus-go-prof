@@ -1,13 +1,13 @@
-// +build bench
-
-package hw10programoptimization
+package hw10programoptimization_test
 
 import (
 	"archive/zip"
+	"bytes"
 	"testing"
 	"time"
 
 	"github.com/stretchr/testify/require"
+	stats "github.com/turneps403/otus-go-prof/hw10_program_optimization"
 )
 
 const (
@@ -33,7 +33,7 @@ func TestGetDomainStat_Time_And_Memory(t *testing.T) {
 		require.NoError(t, err)
 
 		b.StartTimer()
-		stat, err := GetDomainStat(data, "biz")
+		stat, err := stats.GetDomainStat(data, "biz")
 		b.StopTimer()
 		require.NoError(t, err)
 
@@ -49,7 +49,40 @@ func TestGetDomainStat_Time_And_Memory(t *testing.T) {
 	require.Less(t, mem, memoryLimit, "the program is too greedy")
 }
 
-var expectedBizStat = DomainStat{
+func BenchmarkHeavy(b *testing.B) {
+	b.StopTimer()
+	r, _ := zip.OpenReader("testdata/users.dat.zip")
+	defer r.Close()
+	for n := 0; n < b.N; n++ {
+		data, _ := r.File[0].Open()
+		b.StartTimer()
+		stat, err := stats.GetDomainStat(data, "biz")
+		b.StopTimer()
+		require.NoError(b, err)
+		require.Equal(b, expectedBizStat, stat)
+		data.Close()
+	}
+}
+
+func BenchmarkLight(b *testing.B) {
+	b.StopTimer()
+	str := `{"Id":1,"Name":"Howard Mendoza","Username":"0Oliver","Email":"aliquid_qui_ea@Browsedrive.gov","Phone":"6-866-899-36-79","Password":"InAQJvsq","Address":"Blackbird Place 25"}
+{"Id":2,"Name":"Jesse Vasquez","Username":"qRichardson","Email":"mLynch@broWsecat.com","Phone":"9-373-949-64-00","Password":"SiZLeNSGn","Address":"Fulton Hill 80"}
+{"Id":3,"Name":"Clarence Olson","Username":"RachelAdams","Email":"RoseSmith@Browsecat.com","Phone":"988-48-97","Password":"71kuz3gA5w","Address":"Monterey Park 39"}
+{"Id":4,"Name":"Gregory Reid","Username":"tButler","Email":"5Moore@Teklist.net","Phone":"520-04-16","Password":"r639qLNu","Address":"Sunfield Park 20"}
+{"Id":5,"Name":"Janice Rose","Username":"KeithHart","Email":"nulla@Linktype.com","Phone":"146-91-01","Password":"acSBF5","Address":"Russell Trail 61"}`
+
+	for n := 0; n < b.N; n++ {
+		data := bytes.NewBufferString(str)
+		b.StartTimer()
+		stat, err := stats.GetDomainStat(data, "biz")
+		b.StopTimer()
+		require.NoError(b, err)
+		require.Equal(b, stat, stat)
+	}
+}
+
+var expectedBizStat = stats.DomainStat{
 	"abata.biz":         25,
 	"abatz.biz":         25,
 	"agimba.biz":        28,

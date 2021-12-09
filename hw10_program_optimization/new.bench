@@ -1,0 +1,22 @@
+BenchmarkHeavy     	       5	 207964097 ns/op	12348609 B/op	  700981 allocs/op
+BenchmarkHeavy     	       5	 207539230 ns/op	12349108 B/op	  700983 allocs/op
+BenchmarkHeavy     	       5	 209747850 ns/op	12348398 B/op	  700980 allocs/op
+BenchmarkHeavy     	       5	 208481388 ns/op	12349064 B/op	  700983 allocs/op
+BenchmarkHeavy     	       5	 213348664 ns/op	12349188 B/op	  700984 allocs/op
+BenchmarkHeavy-4   	       5	 211730443 ns/op	12349227 B/op	  700984 allocs/op
+BenchmarkHeavy-4   	       5	 214764964 ns/op	12348835 B/op	  700982 allocs/op
+BenchmarkHeavy-4   	       5	 210265485 ns/op	12348876 B/op	  700983 allocs/op
+BenchmarkHeavy-4   	       5	 212790948 ns/op	12348718 B/op	  700982 allocs/op
+BenchmarkHeavy-4   	       5	 216786839 ns/op	12348822 B/op	  700982 allocs/op
+BenchmarkLight     	     189	   5937584 ns/op	    4712 B/op	      37 allocs/op
+BenchmarkLight     	     206	   5955261 ns/op	    4712 B/op	      37 allocs/op
+BenchmarkLight     	     199	   6150623 ns/op	    4712 B/op	      37 allocs/op
+BenchmarkLight     	     196	   5870554 ns/op	    4712 B/op	      37 allocs/op
+BenchmarkLight     	     205	   5943922 ns/op	    4712 B/op	      37 allocs/op
+BenchmarkLight-4   	     202	   5839388 ns/op	    4712 B/op	      37 allocs/op
+BenchmarkLight-4   	     204	   5820736 ns/op	    4712 B/op	      37 allocs/op
+BenchmarkLight-4   	     205	   5917006 ns/op	    4712 B/op	      37 allocs/op
+BenchmarkLight-4   	     201	   6140135 ns/op	    4712 B/op	      37 allocs/op
+BenchmarkLight-4   	     206	   5924808 ns/op	    4712 B/op	      37 allocs/op
+PASS
+ok  	command-line-arguments	71.080s
