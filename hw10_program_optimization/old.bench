@@ -1,0 +1,25 @@
+goos: darwin
+goarch: amd64
+cpu: Intel(R) Core(TM) i7-7567U CPU @ 3.50GHz
+BenchmarkHeavy     	       2	 741963509 ns/op	304770360 B/op	 3045389 allocs/op
+BenchmarkHeavy     	       2	 722478490 ns/op	304770524 B/op	 3045391 allocs/op
+BenchmarkHeavy     	       2	 716289565 ns/op	304770344 B/op	 3045391 allocs/op
+BenchmarkHeavy     	       2	 714522688 ns/op	304770992 B/op	 3045394 allocs/op
+BenchmarkHeavy     	       2	 731004114 ns/op	304771320 B/op	 3045395 allocs/op
+BenchmarkHeavy-4   	       2	 736530138 ns/op	304998676 B/op	 3045418 allocs/op
+BenchmarkHeavy-4   	       2	 742688144 ns/op	305018244 B/op	 3045424 allocs/op
+BenchmarkHeavy-4   	       2	 925209949 ns/op	305074596 B/op	 3045429 allocs/op
+BenchmarkHeavy-4   	       2	 800137575 ns/op	305202360 B/op	 3045432 allocs/op
+BenchmarkHeavy-4   	       2	 819796370 ns/op	305128796 B/op	 3045432 allocs/op
+BenchmarkLight     	       6	 189310922 ns/op	132842906 B/op	 1700070 allocs/op
+BenchmarkLight     	       6	 191890149 ns/op	132842984 B/op	 1700070 allocs/op
+BenchmarkLight     	       6	 191268143 ns/op	132842984 B/op	 1700070 allocs/op
+BenchmarkLight     	       6	 194332602 ns/op	132842984 B/op	 1700070 allocs/op
+BenchmarkLight     	       5	 208450259 ns/op	132842979 B/op	 1700070 allocs/op
+BenchmarkLight-4   	       5	 208474829 ns/op	132843808 B/op	 1700074 allocs/op
+BenchmarkLight-4   	       6	 201521205 ns/op	132843674 B/op	 1700073 allocs/op
+BenchmarkLight-4   	       5	 200686912 ns/op	132843657 B/op	 1700073 allocs/op
+BenchmarkLight-4   	       5	 202929715 ns/op	132843619 B/op	 1700073 allocs/op
+BenchmarkLight-4   	       5	 200067689 ns/op	132843708 B/op	 1700074 allocs/op
+PASS
+ok  	command-line-arguments	44.121s
