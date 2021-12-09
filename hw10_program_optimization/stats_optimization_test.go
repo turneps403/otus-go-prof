@@ -22,6 +22,7 @@ const (
 // go test -v -count=1 -timeout=30s -tags bench .
 func TestGetDomainStat_Time_And_Memory(t *testing.T) {
 	bench := func(b *testing.B) {
+		b.Helper()
 		b.StopTimer()
 
 		r, err := zip.OpenReader("testdata/users.dat.zip")
@@ -33,11 +34,11 @@ func TestGetDomainStat_Time_And_Memory(t *testing.T) {
 		data, err := r.File[0].Open()
 		require.NoError(t, err)
 
-		b.ResetTimer()
 		b.StartTimer()
-		stat, err := stats.GetDomainStat(data, "biz")
+		stat, err := GetDomainStat(data, "biz")
 		b.StopTimer()
 		require.NoError(t, err)
+
 		require.Equal(t, expectedBizStat, stat)
 	}
 
