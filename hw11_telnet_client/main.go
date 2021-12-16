@@ -70,9 +70,13 @@ func main() {
 		cl.Send()
 		err := cl.Send()
 		if err != nil {
-			zap.Error(err)
+			select {
+			case <-ctx.Done():
+			default:
+				zap.Error(err)
+				cancel()
+			}
 		}
-		cancel()
 	}()
 
 	// Getting smth
@@ -80,9 +84,13 @@ func main() {
 		zap := logger.Zap()
 		err := cl.Receive()
 		if err != nil {
-			zap.Error(err)
+			select {
+			case <-ctx.Done():
+			default:
+				zap.Error(err)
+				cancel()
+			}
 		}
-		cancel()
 	}()
 
 	// Awaiting signals and graceful shutdown
@@ -90,8 +98,9 @@ func main() {
 		select {
 		case <-ctx.Done():
 		case <-signalsChan:
-			zap := logger.Zap()
-			zap.Info("Connection was closed by peer")
+			// Any message to log case not pass test.sh
+			// zap := logger.Zap()
+			// zap.Infow("Connection was closed by peer")
 			cancel()
 		}
 	}()
